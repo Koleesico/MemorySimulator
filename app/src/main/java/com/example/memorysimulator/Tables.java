@@ -17,8 +17,8 @@ public class Tables {
     void ChooseImages(){
         Chosen = new int[N_required];
         for(int i=0; i<Chosen.length; i++){
-            //int n =  random.nextInt(Nmax);
-            int n = 2;
+             int n =  random.nextInt(Nmax);
+            //int n = 2;
             Chosen[i]=Resourses[n];
 
         }

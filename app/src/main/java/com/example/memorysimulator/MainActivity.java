@@ -56,6 +56,10 @@ public class MainActivity extends AppCompatActivity {
                 level=ToNextLevel(Images);
                 tv_level.setText("Уровень "+level);
                 tv_lives.setText("Жизни "+lives);
+
+                ans1.setText("");
+                ans2.setText("");
+                ans3.setText("");
             }
         });
 
