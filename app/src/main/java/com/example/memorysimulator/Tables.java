@@ -6,7 +6,8 @@ import java.util.Random;
 
 public class Tables {
 
-    int Resourses[] = {R.drawable.android_icon,  R.drawable.flower, R.drawable.smile, R.drawable.sandwich};
+    int Resourses[] = {R.drawable.android_icon,  R.drawable.flower, R.drawable.smile, R.drawable.sandwich,
+            R.drawable.android_icon}; //исправить
      static int Nmax =2;
      static int N_required = Nmax+3;
      static int Chosen[] = new int[N_required];

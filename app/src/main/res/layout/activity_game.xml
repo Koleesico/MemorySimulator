@@ -4,13 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:background="#FFFFFF"
+    android:backgroundTint="@color/darkblue"
+    tools:context=".GameActivity">
 
     <EditText
         android:id="@+id/editTextNumber1"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:ems="10"
+        android:textColor="@color/yellow"
         android:inputType="number"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/imageView1"
@@ -24,6 +27,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:ems="10"
+        android:textColor="@color/yellow"
         android:inputType="number"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/imageView2"
@@ -34,14 +38,15 @@
 
     <com.example.memorysimulator.MovingPictures
         android:id="@+id/movingPictures"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.15"
+        app:layout_constraintVertical_bias="0.349"
         tools:ignore="MissingConstraints" />
 
     <ImageView
@@ -86,6 +91,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:ems="10"
+        android:textColor="@color/yellow"
         android:inputType="number"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/imageView3"
@@ -99,35 +105,92 @@
         android:layout_width="159dp"
         android:layout_height="53dp"
         android:text="Ответить"
+        android:backgroundTint="@color/pink"
+        android:textColor="@color/yellow"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextNumber2"
         app:layout_constraintVertical_bias="0.047" />
 
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="164dp"
+        app:layout_constraintBottom_toBottomOf="@+id/movingPictures"
+        app:layout_constraintEnd_toEndOf="@+id/movingPictures"
+        app:layout_constraintStart_toStartOf="@+id/movingPictures"
+        app:srcCompat="@drawable/mainmenu"
+        tools:srcCompat="@drawable/mainmenu" />
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Уровень 1"
-        app:layout_constraintBottom_toTopOf="@+id/movingPictures"
-        app:layout_constraintEnd_toEndOf="@+id/movingPictures"
-        app:layout_constraintStart_toStartOf="@+id/movingPictures"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.836" />
+        android:textColor="@color/darkblue"
+        android:text="1"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintHorizontal_bias="0.58"
+        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.575" />
 
     <TextView
         android:id="@+id/lives"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Жизни 3"
-        app:layout_constraintBottom_toTopOf="@+id/textView"
-        app:layout_constraintEnd_toEndOf="@+id/movingPictures"
-        app:layout_constraintStart_toStartOf="@+id/movingPictures"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textColor="@color/darkblue"
+        android:text="3"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintHorizontal_bias="0.22"
+        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.68" />
 
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="31dp"
+        android:layout_height="25dp"
+        android:layout_marginBottom="60dp"
+        android:onClick="Home"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintHorizontal_bias="0.07"
+        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:srcCompat="@drawable/empty"
+        tools:ignore="OnClick" />
 
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="31dp"
+        android:layout_height="25dp"
+        android:onClick="Pause"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.333"
+        app:srcCompat="@drawable/empty"
+        tools:ignore="OnClick" />
 
-
-
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="31dp"
+        android:layout_height="25dp"
+        android:onClick="Repeat"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintHorizontal_bias="0.855"
+        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/imageView5"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/empty"
+        tools:ignore="OnClick" />
 </androidx.constraintlayout.widget.ConstraintLayout>

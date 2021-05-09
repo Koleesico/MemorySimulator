@@ -1,16 +1,16 @@
 package com.example.memorysimulator;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Scroller;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class GameActivity extends AppCompatActivity {
     int Resourses[] = {R.drawable.android_icon, R.drawable.flower, R.drawable.smile, R.drawable.sandwich};
     ImageView image1, image2, image3;
     EditText ans1, ans2, ans3;
@@ -18,17 +18,22 @@ public class MainActivity extends AppCompatActivity {
     Tables TbHelper = new Tables();
     Button btn_answer;
     int[] Answers = new int[3];
-
-
-
     int lives = 3;
+    boolean letStop=true;
+
     static int level = 1;
+    static boolean repeat=false;
+    static boolean keep_going = true;
+   
+
+    // уровень - поле DrawThread
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_game);
         image1 = findViewById(R.id.imageView1);
         image2 = findViewById(R.id.imageView2);
         image3 = findViewById(R.id.imageView3);
@@ -54,8 +59,8 @@ public class MainActivity extends AppCompatActivity {
 
                 lives=DecLives();
                 level=ToNextLevel(Images);
-                tv_level.setText("Уровень "+level);
-                tv_lives.setText("Жизни "+lives);
+                tv_level.setText(""+level);
+                tv_lives.setText(""+lives);
 
                 ans1.setText("");
                 ans2.setText("");
@@ -69,8 +74,7 @@ public class MainActivity extends AppCompatActivity {
         if (TbHelper.ToCompare(Answers)){
             level++;
             TbHelper.CreateTables(Images);
-            MovingPictures.DrawThread.UpdateMovingParametrs(level);
-
+            letStop=true;
 
         }
         return level;
@@ -83,4 +87,26 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void Home(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    public void Pause(View view) {
+        if(keep_going&&letStop)
+        {keep_going=false;
+            letStop=false;
+        }
+        else {
+            keep_going=true;
+
+        }
+
+    }
+
+    public void Repeat(View view) {
+        lives--;
+        tv_lives.setText(""+lives);
+        repeat=true;
+    }
 }
