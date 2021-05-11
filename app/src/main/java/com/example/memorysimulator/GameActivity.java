@@ -10,23 +10,30 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import static com.example.memorysimulator.Tables.N_required;
+import static com.example.memorysimulator.Tables.Nmax;
+
 public class GameActivity extends AppCompatActivity {
-    int Resourses[] = {R.drawable.android_icon, R.drawable.flower, R.drawable.smile, R.drawable.sandwich};
     ImageView image1, image2, image3;
     EditText ans1, ans2, ans3;
     TextView tv_lives, tv_level;
     Tables TbHelper = new Tables();
     Button btn_answer;
+
     int[] Answers = new int[3];
     int lives = 3;
+
     boolean letStop=true;
+    boolean running = true;
+
+    Changer changer;
+
 
     static int level = 1;
     static boolean repeat=false;
     static boolean keep_going = true;
-   
+    static boolean end=false;
 
-    // уровень - поле DrawThread
 
 
 
@@ -40,53 +47,74 @@ public class GameActivity extends AppCompatActivity {
 
         tv_level = findViewById(R.id.textView);
         tv_lives = findViewById(R.id.lives);
-        //test = findViewById(R.id.test);
 
         ans1 = findViewById(R.id.editTextNumber1);
         ans2 = findViewById(R.id.editTextNumber2);
         ans3 = findViewById(R.id.editTextNumber3);
 
+        changer = new Changer();
+        changer.start();
+
+        btn_answer = findViewById(R.id.btn_answer);
+
+    }
+
+
+
+    class Changer extends Thread{
         ImageView Images[]={image1, image2, image3};
 
-        TbHelper.CreateTables(Images);
-        btn_answer = findViewById(R.id.btn_answer);
-        btn_answer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Answers[0]=Integer.parseInt(ans1.getText().toString());
-                Answers[1]=Integer.parseInt(ans2.getText().toString());
-                Answers[2]=Integer.parseInt(ans3.getText().toString());
-
-                lives=DecLives();
-                level=ToNextLevel(Images);
-                tv_level.setText(""+level);
-                tv_lives.setText(""+lives);
-
-                ans1.setText("");
-                ans2.setText("");
-                ans3.setText("");
-            }
-        });
-
-    }
-
-    int ToNextLevel(ImageView Images[]) { //Переход на следующий уровень
-        if (TbHelper.ToCompare(Answers)){
-            level++;
+        @Override
+        public void run() {
             TbHelper.CreateTables(Images);
-            letStop=true;
+
+                 while (running){
+                     btn_answer.setOnClickListener(new View.OnClickListener() {
+
+                         @Override
+                         public void onClick(View v) {
+                             Answers[0]=Integer.parseInt(ans1.getText().toString());
+                             Answers[1]=Integer.parseInt(ans2.getText().toString());
+                             Answers[2]=Integer.parseInt(ans3.getText().toString());
+
+                             lives=DecLives();
+                             level=ToNextLevel(Images);
+                             tv_level.setText(""+level);
+                             tv_lives.setText(""+lives);
+
+                             ans1.setText("");
+                             ans2.setText("");
+                             ans3.setText("");
+                         }
+                     });
+                     if(end){
+                         TbHelper.SetImages(Images);
+                     }
+                 }
+        }
+
+        int ToNextLevel(ImageView [] Images) { //Переход на следующий уровень
+            if (TbHelper.ToCompare(Answers)){
+                level++;
+                Nmax++;
+                N_required++;
+                TbHelper.CreateTables(Images);
+                letStop=true;
+
+
+            }
+            return level;
+        }
+
+        int DecLives() {
+            if (!TbHelper.ToCompare(Answers))
+                lives--;
+            return lives;
 
         }
-        return level;
-    }
 
-    int DecLives() {
-        if (!TbHelper.ToCompare(Answers))
-            lives--;
-        return lives;
 
     }
-
     public void Home(View view) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
@@ -108,5 +136,12 @@ public class GameActivity extends AppCompatActivity {
         lives--;
         tv_lives.setText(""+lives);
         repeat=true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        running = false;
+        super.onDestroy();
+
     }
 }
