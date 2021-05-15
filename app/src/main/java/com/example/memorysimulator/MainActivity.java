@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void ReadRules(View view) {
-        Intent intent = new Intent(this, FindActivity.class);
+        Intent intent = new Intent(this, RulesActivity.class);
         startActivity(intent);
     }
 
