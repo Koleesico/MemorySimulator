@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import static com.example.memorysimulator.GameActivity.end;
 import static com.example.memorysimulator.GameActivity.keep_going;
 import static com.example.memorysimulator.GameActivity.level;
 import static com.example.memorysimulator.GameActivity.repeat;
@@ -74,7 +75,6 @@ import static com.example.memorysimulator.GameActivity.repeat;
         Paint backgroundPaint = new Paint();
 
         int cur_col =1;               //контролеры
-        boolean end=false;
         int current_lv = level;
 
 
@@ -173,7 +173,7 @@ import static com.example.memorysimulator.GameActivity.repeat;
 
                         /*canvas.drawBitmap(testBitmap,tx, ty, backgroundPaint);           //тестовое
                         tx+=dx;*/
-
+                    //if(end)ChangePictures();                                            //убрать
                     if (current_lv!=level)
                     UpdateMovingParametrs();
 

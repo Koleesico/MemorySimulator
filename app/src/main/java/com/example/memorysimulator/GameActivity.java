@@ -10,9 +10,16 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
+import static com.example.memorysimulator.Tables.N_required;
+import static com.example.memorysimulator.Tables.Nmax;
+import static com.example.memorysimulator.Tables.OpenedImages;
+
 public class GameActivity extends AppCompatActivity {
-    int Resourses[] = {R.drawable.android_icon, R.drawable.flower, R.drawable.smile, R.drawable.sandwich};
-    ImageView image1, image2, image3;
+    static ImageView image1, image2, image3;
+    static ImageView Images[];
     EditText ans1, ans2, ans3;
     TextView tv_lives, tv_level;
     Tables TbHelper = new Tables();
@@ -20,35 +27,45 @@ public class GameActivity extends AppCompatActivity {
     int[] Answers = new int[3];
     int lives = 3;
     boolean letStop=true;
+    Intent lifeIntent;
+
+
 
     static int level = 1;
     static boolean repeat=false;
     static boolean keep_going = true;
-   
+    static Boolean end=false;
 
-    // уровень - поле DrawThread
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_game);
         image1 = findViewById(R.id.imageView1);
         image2 = findViewById(R.id.imageView2);
         image3 = findViewById(R.id.imageView3);
 
+        Images = new ImageView[3];
+
+        Images[0]=image1;
+        Images[1]=image2;
+        Images[2]=image3;
+
         tv_level = findViewById(R.id.textView);
         tv_lives = findViewById(R.id.lives);
-        //test = findViewById(R.id.test);
+
 
         ans1 = findViewById(R.id.editTextNumber1);
         ans2 = findViewById(R.id.editTextNumber2);
         ans3 = findViewById(R.id.editTextNumber3);
 
-        ImageView Images[]={image1, image2, image3};
+
 
         TbHelper.CreateTables(Images);
+
         btn_answer = findViewById(R.id.btn_answer);
         btn_answer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,16 +82,42 @@ public class GameActivity extends AppCompatActivity {
                 ans1.setText("");
                 ans2.setText("");
                 ans3.setText("");
+
+                if(lives==0) GetLife();
+
             }
         });
 
+        Timer timer = new Timer();
+        TimerTask check = new TimerTask() {
+            @Override
+            public void run() {
+                    if(end) {
+                        ChangePictures();
+                        timer.cancel();
+                    }
+            }
+        };
+        timer.schedule(check, 0, 1000);
+
+        //boolean running = true;
+        /*while (running){
+            if(end){
+                ChangePictures();
+                running = false;
+            }
+        }*/
     }
 
-    int ToNextLevel(ImageView Images[]) { //Переход на следующий уровень
+
+    int ToNextLevel(ImageView [] Images) { //Переход на следующий уровень
         if (TbHelper.ToCompare(Answers)){
             level++;
+            Nmax++;
+            N_required++;
             TbHelper.CreateTables(Images);
             letStop=true;
+
 
         }
         return level;
@@ -108,5 +151,25 @@ public class GameActivity extends AppCompatActivity {
         lives--;
         tv_lives.setText(""+lives);
         repeat=true;
+    }
+    public void GetLife(){
+        lifeIntent = new Intent(this, FindActivity.class);
+        startActivityForResult(lifeIntent, 11);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) {
+            case RESULT_OK:
+                lives = data.getIntExtra("life", 0);
+                tv_lives.setText(""+lives);
+                break;
+        }
+    }
+
+    public static void ChangePictures(){
+        for (int i = 0; i <Images.length ; i++) {
+            Images[i].setImageResource(OpenedImages[i]);
+        }
     }
 }
