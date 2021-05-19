@@ -85,6 +85,10 @@ public class Tables {
         ChoseOpenedImages();
         SetSystemAnswers();
     }
-
+    void SetImages (ImageView[] Images){
+        for (int i = 0; i <Images.length ; i++) {
+            Images[i].setImageResource(OpenedImages[i]);
+        }
+    }
 }
 

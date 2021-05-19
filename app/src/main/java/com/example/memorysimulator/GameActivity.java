@@ -36,6 +36,7 @@ public class GameActivity extends AppCompatActivity {
     static boolean keep_going = true;
     static Boolean end=false;
 
+    // уровень - поле DrawThread
 
 
 
