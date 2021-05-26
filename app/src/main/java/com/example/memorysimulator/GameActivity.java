@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -89,7 +90,14 @@ public class GameActivity extends AppCompatActivity {
                 ans2.setText("");
                 ans3.setText("");
 
+                String s ="";                                            //////////проверка
+                for (int i = 0; i < TbHelper.SystemAnswers.length; i++) {
+                    s+=TbHelper.SystemAnswers[i]+" ";
+                }
+                Toast.makeText(GameActivity.this, s, Toast.LENGTH_LONG).show(); ///////////
+
                 if(lives==0) GetLife();
+
 
             }
         });
@@ -164,12 +172,13 @@ public class GameActivity extends AppCompatActivity {
     public void OpenPictures(){
         Handler.Callback hc = new Handler.Callback() {
         @Override
-        public boolean handleMessage(@NonNull Message msg) {
-             if (msg.what==10) {
-                 for (int i = 0; i < Images.length; i++)
-                     Images[i].setImageResource(OpenedImages[i]);
-             }
-
+        public boolean handleMessage(@NonNull Message msg) {                  //здесь были исправления
+            switch (msg.what){
+                case 10: for (int i = 0; i < Images.length; i++)
+                    Images[i].setImageResource(OpenedImages[i]);
+                    break;
+                case 1: TbHelper.SetHiddenImages(Images);
+            }
             return false;
         }
     };

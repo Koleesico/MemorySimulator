@@ -7,7 +7,7 @@ import java.util.Random;
 public class Tables {
 
     int Resourses[] = {R.drawable.android_icon,  R.drawable.flower, R.drawable.smile, R.drawable.sandwich,
-            R.drawable.android_icon}; //исправить
+            R.drawable.bee, R.drawable.cat, R.drawable.sloth}; //исправить
      static int Nmax =3;
      static int N_required = Nmax+3;
      static int Chosen[] = new int[N_required];
@@ -64,6 +64,7 @@ public class Tables {
      }
 
      void SetSystemAnswers (){
+         SystemAnswers = new int[3];
         for(int i=0; i<OpenedImages.length; i++){
             for (int j = 0; j < Chosen.length; j++) {
                 if(Chosen[j]==OpenedImages[i]) SystemAnswers[i]++;
@@ -85,10 +86,6 @@ public class Tables {
         ChoseOpenedImages();
         SetSystemAnswers();
     }
-    void SetImages (ImageView[] Images){
-        for (int i = 0; i <Images.length ; i++) {
-            Images[i].setImageResource(OpenedImages[i]);
-        }
-    }
+    
 }
 

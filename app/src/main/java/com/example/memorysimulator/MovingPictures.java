@@ -73,7 +73,7 @@ import static com.example.memorysimulator.GameActivity.repeat;
         int N = Tables.N_required;   //изменяемые параметры
         float[] x = new float[N];
         float[] y = new float[N];
-        int dx = 5;
+        int dx = 3;
         Paint backgroundPaint = new Paint();
         int counter=4;
 
@@ -147,16 +147,6 @@ import static com.example.memorysimulator.GameActivity.repeat;
                     ch=canvas.getHeight();
 
                     canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), backgroundPaint);
-                    /*while(letCount){
-                        backgroundPaint.setColor(getResources().getColor(R.color.yellow));
-                        counter--;
-                        canvas.drawText(""+counter, cw/2, ch/2, backgroundPaint );
-                        if(counter==1){
-                            letCount=false;
-                            counter=3;
-                            backgroundPaint.setColor(getResources().getColor(R.color.blue));
-                        }
-                    }*/
                     if(letMove){
                         if(repeat) ChangeCoordinates();
 
@@ -191,7 +181,8 @@ import static com.example.memorysimulator.GameActivity.repeat;
                         /*canvas.drawBitmap(testBitmap,tx, ty, backgroundPaint);           //тестовое
                         tx+=dx;*/
                     //if(end)ChangePictures();                                            //убрать
-                    if(end){handler.sendEmptyMessage(10);}
+                    if(end){handler.sendEmptyMessage(10); }
+                    else {handler.sendEmptyMessage(1);}
                     if (current_lv!=level)
                     UpdateMovingParametrs();
 

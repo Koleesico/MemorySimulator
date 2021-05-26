@@ -42,16 +42,22 @@ int cs =0;
 Object Sets[][][] = {
 
         {{R.string.req1},
-        {R.color.yellow, R.color.pink, R.color.purple_200,
-        R.color.purple_200, R.color.teal_200, R.color.blue,
-        R.color.blue, R.color.yellow, R.color.pink},
-        {false, true, false, false, false, false, false, false, true}},
+        {R.drawable.competition1, R.drawable.competition2, R.drawable.competition3,
+        R.drawable.competition4, R.drawable.competition5, R.drawable.competition6,
+        R.drawable.competition7, R.drawable.competition8, R.drawable.competition9},
+        {false, true, false, true, true, false, false, false, false}},
 
         {{R.string.req2},
-        {R.color.yellow, R.color.pink, R.color.yellow,
-        R.color.purple_200, R.color.teal_200, R.color.blue,
-        R.color.blue, R.color.yellow, R.color.pink},
-        {true, false, true, false, false, false, false, true, false}}
+        {R.drawable.competition1, R.drawable.competition2, R.drawable.competition3,
+                R.drawable.competition4, R.drawable.competition5, R.drawable.competition6,
+                R.drawable.competition7, R.drawable.competition8, R.drawable.competition9},
+        {true, false, true, false, true, false, true, true, false}},
+
+        {{R.string.req3},
+                {R.drawable.competition1, R.drawable.competition2, R.drawable.competition3,
+                        R.drawable.competition4, R.drawable.competition5, R.drawable.competition6,
+                        R.drawable.competition7, R.drawable.competition8, R.drawable.competition9},
+                {true, false, true, true, true, false, false, false, false}}
 
 };
 
@@ -62,8 +68,8 @@ Object Sets[][][] = {
         progressBar = findViewById(R.id.progressBar);
         tvReq = findViewById(R.id.textView3);
 
-        cs = random.nextInt(2);
 
+        cs = random.nextInt(2);
         tvReq.setText(getString((Integer) Sets[cs][0][0])) ;
 
         im1 = findViewById(R.id.im1);
@@ -127,9 +133,9 @@ Object Sets[][][] = {
         findHandler = new Handler(fhc);
         ShowProgress();
 
-
-
     }
+
+
 
     void ShowProgress(){
         timer = new Timer(true);
