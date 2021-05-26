@@ -11,7 +11,9 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import static com.example.memorysimulator.GameActivity.end;
+import static com.example.memorysimulator.GameActivity.handler;
 import static com.example.memorysimulator.GameActivity.keep_going;
+import static com.example.memorysimulator.GameActivity.letMove;
 import static com.example.memorysimulator.GameActivity.level;
 import static com.example.memorysimulator.GameActivity.repeat;
 
@@ -73,6 +75,7 @@ import static com.example.memorysimulator.GameActivity.repeat;
         float[] y = new float[N];
         int dx = 5;
         Paint backgroundPaint = new Paint();
+        int counter=4;
 
         int cur_col =1;               //контролеры
         int current_lv = level;
@@ -93,6 +96,8 @@ import static com.example.memorysimulator.GameActivity.repeat;
          float tx =0;
          float ty =0;
          Context Mycontext;
+
+         //boolean letCount=true;
 
 
 
@@ -142,40 +147,54 @@ import static com.example.memorysimulator.GameActivity.repeat;
                     ch=canvas.getHeight();
 
                     canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), backgroundPaint);
+                    /*while(letCount){
+                        backgroundPaint.setColor(getResources().getColor(R.color.yellow));
+                        counter--;
+                        canvas.drawText(""+counter, cw/2, ch/2, backgroundPaint );
+                        if(counter==1){
+                            letCount=false;
+                            counter=3;
+                            backgroundPaint.setColor(getResources().getColor(R.color.blue));
+                        }
+                    }*/
+                    if(letMove){
+                        if(repeat) ChangeCoordinates();
 
-                    if(repeat) ChangeCoordinates();
+                        if (current_lv<pl2){
+                            for (int i = 0; i < N; i++) {
+                                canvas.drawBitmap(
+                                        BitmapFactory.decodeResource(Mycontext.getResources(), Tables.Chosen[i]),
+                                        x[i], y[i],
+                                        backgroundPaint);
+                                if(keep_going) x[i] += dx;
+                            }
+                            if(x[N-1]>cw) end=true;
+                        }
+                        else {
+                            for (int i = 0; i < N; i++) {
+                                canvas.drawBitmap(
+                                        BitmapFactory.decodeResource(Mycontext.getResources(), Tables.Chosen[i]),
+                                        x[i], y[i],
+                                        backgroundPaint);
+                                if (keep_going){
+                                    if(i%2==0) x[i] += dx;
+                                    else x[i]-=dx;
+                                }
 
-                      if (current_lv<pl2){
-                          for (int i = 0; i < N; i++) {
-                              canvas.drawBitmap(
-                                      BitmapFactory.decodeResource(Mycontext.getResources(), Tables.Chosen[i]),
-                                      x[i], y[i],
-                                      backgroundPaint);
-                             if(keep_going) x[i] += dx;
-                          }
-                          if(x[N-1]>cw) end=true;
-                      }
-                      else {
-                          for (int i = 0; i < N; i++) {
-                              canvas.drawBitmap(
-                                      BitmapFactory.decodeResource(Mycontext.getResources(), Tables.Chosen[i]),
-                                      x[i], y[i],
-                                      backgroundPaint);
-                              if (keep_going){
-                                  if(i%2==0) x[i] += dx;
-                                  else x[i]-=dx;
-                              }
+                            }
+                            if ( ((x[N-1]>cw)&&((N-1)%2==0))  ||  ((x[N-1]<0)&&((N-1)%2!=0)) ) end=true;
+                        }
+                    }
 
-                          }
-                          if ( ((x[N-1]>cw)&&((N-1)%2==0))  ||  ((x[N-1]<0)&&((N-1)%2!=0)) ) end=true;
-                      }
 
 
                         /*canvas.drawBitmap(testBitmap,tx, ty, backgroundPaint);           //тестовое
                         tx+=dx;*/
                     //if(end)ChangePictures();                                            //убрать
+                    if(end){handler.sendEmptyMessage(10);}
                     if (current_lv!=level)
                     UpdateMovingParametrs();
+
 
                 } finally {
                     if (canvas != null) {

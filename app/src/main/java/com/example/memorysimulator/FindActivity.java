@@ -2,34 +2,69 @@ package com.example.memorysimulator;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class FindActivity extends AppCompatActivity implements View.OnClickListener {
 
 ImageView im1, im2, im3, im4, im5, im6, im7, im8, im9;
+ProgressBar progressBar;
+TextView tvReq;
+
 Map<Integer, Boolean> SystemCards = new HashMap<Integer, Boolean>();
 Map<Integer, Boolean> ChosenCards = new HashMap<Integer, Boolean>();
 
-ProgressBar progressBar;
-int count =0;
 Timer timer;
+
+Random random = new Random();
+Handler findHandler;
+
+int count =0;
 int lifePos =0;
+int cs =0;
+
+
+Object Sets[][][] = {
+
+        {{R.string.req1},
+        {R.color.yellow, R.color.pink, R.color.purple_200,
+        R.color.purple_200, R.color.teal_200, R.color.blue,
+        R.color.blue, R.color.yellow, R.color.pink},
+        {false, true, false, false, false, false, false, false, true}},
+
+        {{R.string.req2},
+        {R.color.yellow, R.color.pink, R.color.yellow,
+        R.color.purple_200, R.color.teal_200, R.color.blue,
+        R.color.blue, R.color.yellow, R.color.pink},
+        {true, false, true, false, false, false, false, true, false}}
+
+};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find);
         progressBar = findViewById(R.id.progressBar);
+        tvReq = findViewById(R.id.textView3);
+
+        cs = random.nextInt(2);
+
+        tvReq.setText(getString((Integer) Sets[cs][0][0])) ;
 
         im1 = findViewById(R.id.im1);
         im2 = findViewById(R.id.im2);
@@ -41,6 +76,17 @@ int lifePos =0;
         im8 = findViewById(R.id.im8);
         im9 = findViewById(R.id.im9);
 
+        im1.setImageResource((Integer) Sets[cs][1][0]);
+        im2.setImageResource((Integer) Sets[cs][1][1]);
+        im3.setImageResource((Integer) Sets[cs][1][2]);
+        im4.setImageResource((Integer) Sets[cs][1][3]);
+        im5.setImageResource((Integer) Sets[cs][1][4]);
+        im6.setImageResource((Integer) Sets[cs][1][5]);
+        im7.setImageResource((Integer) Sets[cs][1][6]);
+        im8.setImageResource((Integer) Sets[cs][1][7]);
+        im9.setImageResource((Integer) Sets[cs][1][8]);
+
+
         im1.setOnClickListener(this);
         im2.setOnClickListener(this);
         im3.setOnClickListener(this);
@@ -51,15 +97,15 @@ int lifePos =0;
         im8.setOnClickListener(this);
         im9.setOnClickListener(this);
 
-       SystemCards.put(im1.getId(), false);
-       SystemCards.put(im2.getId(), true);
-       SystemCards.put(im3.getId(), false);
-       SystemCards.put(im4.getId(), false);
-       SystemCards.put(im5.getId(), false);
-       SystemCards.put(im6.getId(), false);
-       SystemCards.put(im7.getId(), false);
-       SystemCards.put(im8.getId(), false);
-       SystemCards.put(im9.getId(), true);
+       SystemCards.put(im1.getId(), (Boolean) Sets[cs][2][0]);
+       SystemCards.put(im2.getId(), (Boolean) Sets[cs][2][1]);
+       SystemCards.put(im3.getId(), (Boolean) Sets[cs][2][2]);
+       SystemCards.put(im4.getId(), (Boolean) Sets[cs][2][3]);
+       SystemCards.put(im5.getId(), (Boolean) Sets[cs][2][4]);
+       SystemCards.put(im6.getId(), (Boolean) Sets[cs][2][5]);
+       SystemCards.put(im7.getId(), (Boolean) Sets[cs][2][6]);
+       SystemCards.put(im8.getId(), (Boolean) Sets[cs][2][7]);
+       SystemCards.put(im9.getId(), (Boolean) Sets[cs][2][8]);
 
         ChosenCards.put(im1.getId(), false);
         ChosenCards.put(im2.getId(), false);
@@ -71,7 +117,18 @@ int lifePos =0;
         ChosenCards.put(im8.getId(), false);
         ChosenCards.put(im9.getId(), false);
 
+        Handler.Callback fhc = new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                if(msg.what==1)ReturnToGame();
+                return false;
+            }
+        };
+        findHandler = new Handler(fhc);
         ShowProgress();
+
+
+
     }
 
     void ShowProgress(){
@@ -82,7 +139,7 @@ int lifePos =0;
                 count++;
                 progressBar.setProgress(count);
                 if(count==100){
-                    ReturnToGame();
+                    findHandler.sendEmptyMessage(1);
                 }
             }
         };
@@ -98,12 +155,19 @@ int lifePos =0;
     }
 
     public void ReturnToGame(){
-        if(Check())lifePos=1;
-        Intent i = new Intent();
-        i.putExtra("life", lifePos);
-        setResult(RESULT_OK, i);
-        finish();
-
+        if(!Check()){
+            Intent losIntent = new Intent(this, FinishActivity.class);
+            losIntent.putExtra("paste", R.color.darkblue);
+            startActivity(losIntent);
+            finishAffinity();
+        }
+        else {
+            lifePos=1;
+            Intent i = new Intent();
+            i.putExtra("life", lifePos);
+            setResult(RESULT_OK, i);
+            finish();
+        }
 
     }
 
@@ -125,9 +189,8 @@ int lifePos =0;
     public boolean Check(){
         boolean ck=false;
         if(ChosenCards.equals(SystemCards)) ck=true;
-        Toast.makeText(this, ""+ck, Toast.LENGTH_SHORT).show();           // убрать
+        Toast.makeText(getApplicationContext(), ""+ck, Toast.LENGTH_LONG).show();
         return ck;
     }
-
 
 }

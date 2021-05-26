@@ -2,10 +2,18 @@
     <string name="app_name">MemorySimulator</string>
     <string name="textview">TextView</string>
 
+    <string name="req1">
+        Найдите все розовые квадратики
+    </string>
+
+    <string name="req2">
+        Найдите все желтые квадратики
+    </string>
+
     <string name="r1">
         Перед вами будут появляться картинки. Необходимо написатьколичество картинок заданных видов.
     </string>
-     <string name="r2">
+    <string name="r2">
          Цветочек показывает жизни, звездочка - уровень.
      </string>
 

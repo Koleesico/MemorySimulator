@@ -2,16 +2,17 @@ package com.example.memorysimulator;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static com.example.memorysimulator.Tables.N_required;
 import static com.example.memorysimulator.Tables.Nmax;
@@ -21,15 +22,18 @@ public class GameActivity extends AppCompatActivity {
     static ImageView image1, image2, image3;
     static ImageView Images[];
     EditText ans1, ans2, ans3;
-    TextView tv_lives, tv_level;
+    TextView tv_lives, tv_level, tv_time;
     Tables TbHelper = new Tables();
     Button btn_answer;
     int[] Answers = new int[3];
     int lives = 3;
     boolean letStop=true;
+    int finalPicRes;
+
     Intent lifeIntent;
-
-
+    static Handler handler;
+    static boolean letMove=false;
+    //Handler handler;
 
     static int level = 1;
     static boolean repeat=false;
@@ -57,13 +61,14 @@ public class GameActivity extends AppCompatActivity {
 
         tv_level = findViewById(R.id.textView);
         tv_lives = findViewById(R.id.lives);
+        tv_time = findViewById(R.id.tv_time);
 
 
         ans1 = findViewById(R.id.editTextNumber1);
         ans2 = findViewById(R.id.editTextNumber2);
         ans3 = findViewById(R.id.editTextNumber3);
 
-
+        letMove = false;                                       ///////////
 
         TbHelper.CreateTables(Images);
 
@@ -88,38 +93,23 @@ public class GameActivity extends AppCompatActivity {
 
             }
         });
-
-        Timer timer = new Timer();
-        TimerTask check = new TimerTask() {
-            @Override
-            public void run() {
-                    if(end) {
-                        ChangePictures();
-                        timer.cancel();
-                    }
-            }
-        };
-        timer.schedule(check, 0, 1000);
-
-        //boolean running = true;
-        /*while (running){
-            if(end){
-                ChangePictures();
-                running = false;
-            }
-        }*/
-    }
+        CountTime();
+        OpenPictures();
+        }
 
 
-    int ToNextLevel(ImageView [] Images) { //Переход на следующий уровень
+    int ToNextLevel(ImageView [] Images) {
         if (TbHelper.ToCompare(Answers)){
             level++;
+            if(level == 13) {
+                WinGame();
+            }
             Nmax++;
             N_required++;
             TbHelper.CreateTables(Images);
             letStop=true;
-
-
+            letMove = false;
+            CountTime();
         }
         return level;
     }
@@ -150,9 +140,13 @@ public class GameActivity extends AppCompatActivity {
 
     public void Repeat(View view) {
         lives--;
-        tv_lives.setText(""+lives);
-        repeat=true;
+        if(lives==0) GetLife();                                      //получить жизнь
+        else {
+            tv_lives.setText(""+lives);
+            repeat=true;
+        }
     }
+
     public void GetLife(){
         lifeIntent = new Intent(this, FindActivity.class);
         startActivityForResult(lifeIntent, 11);
@@ -162,15 +156,44 @@ public class GameActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode) {
             case RESULT_OK:
-                lives = data.getIntExtra("life", 0);
+                  lives=data.getIntExtra("life", 0);
                 tv_lives.setText(""+lives);
-                break;
         }
     }
 
-    public static void ChangePictures(){
-        for (int i = 0; i <Images.length ; i++) {
-            Images[i].setImageResource(OpenedImages[i]);
+    public void OpenPictures(){
+        Handler.Callback hc = new Handler.Callback() {
+        @Override
+        public boolean handleMessage(@NonNull Message msg) {
+             if (msg.what==10) {
+                 for (int i = 0; i < Images.length; i++)
+                     Images[i].setImageResource(OpenedImages[i]);
+             }
+
+            return false;
         }
+    };
+        handler = new Handler(hc);
     }
+    public void CountTime(){
+        new CountDownTimer(4000, 1000){
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                tv_time.setText(""+millisUntilFinished/1000);
+            }
+
+            @Override
+            public void onFinish() {
+             tv_time.setText("");
+             letMove = true;
+            }
+        }.start();
+    }
+    public void WinGame(){
+        Intent finIntent = new Intent(this, FindActivity.class);
+        finIntent.putExtra("paste", R.color.green);
+        startActivity(finIntent);
+    }
+
 }

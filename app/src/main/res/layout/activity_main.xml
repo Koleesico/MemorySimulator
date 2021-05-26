@@ -20,6 +20,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.05"
+        android:backgroundTint="@color/pink"
+        android:textColor="@color/yellow"
         tools:ignore="OnClick" />
 
     <Button
@@ -29,6 +31,8 @@
         android:layout_marginTop="68dp"
         android:onClick="Play"
         android:text="Играть"
+        android:backgroundTint="@color/pink"
+        android:textColor="@color/yellow"
         app:layout_constraintEnd_toEndOf="@+id/btn_rules"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/btn_rules"
